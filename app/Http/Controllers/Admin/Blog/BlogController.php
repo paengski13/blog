@@ -12,6 +12,7 @@ use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
 use Illuminate\Http\Request;
 use App\Repositories\BlogRepository;
+use Illuminate\Support\Facades\Auth;
 
 /*
  * BlogController
@@ -36,6 +37,7 @@ class BlogController extends Controller
     public function __construct(BlogRepository $blog)
     {
         $this->blogRepository = $blog;
+        $this->auth           = Auth::user();
     }
 
     /**
@@ -52,6 +54,7 @@ class BlogController extends Controller
         // return composed data
         return response()->view('admin.blog.index', [
             'blogs' => $blogs,
+            'userx'  => $this->auth,
         ]);
     }
 
@@ -65,7 +68,9 @@ class BlogController extends Controller
     public function create()
     {
         // call create form view
-        return response()->view('admin.blog.create');
+        return response()->view('admin.blog.create', [
+            'userx'  => $this->auth,
+        ]);
     }
 
     /**
@@ -90,7 +95,9 @@ class BlogController extends Controller
         }
 
         // redirect to the blog list
-        return redirect()->route('admin.blog.index');
+        return redirect()->route('admin.blog.index', [
+            'userx'  => $this->auth,
+        ]);
     }
 
     /**
@@ -110,6 +117,7 @@ class BlogController extends Controller
         // return composed data
         return response()->view('admin.blog.edit', [
             'blog' => $blog,
+            'userx'  => $this->auth,
         ]);
     }
 
@@ -138,7 +146,9 @@ class BlogController extends Controller
         }
 
         // redirect to the blog list page
-        return redirect()->route('admin.blog.index');
+        return redirect()->route('admin.blog.index', [
+            'userx'  => $this->auth,
+        ]);
     }
 
     /**
@@ -161,6 +171,8 @@ class BlogController extends Controller
         }
 
         // redirect to the blog list page
-        return redirect()->route('admin.blog.index');
+        return redirect()->route('admin.blog.index', [
+            'userx'  => $this->auth,
+        ]);
     }
 }
